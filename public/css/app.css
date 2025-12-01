@@ -1,0 +1,45 @@
+/* app.css - core styles */
+:root{
+  --primary:#0d6efd;
+  --accent:#06beb6;
+  --muted:#6c757d;
+}
+
+body {
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #222;
+  background: #f7f9fc;
+}
+
+/* nav hover style for nav-link */
+.nav-hover {
+  transition: all 180ms ease;
+  position: relative;
+}
+.nav-hover:hover {
+  color: #fff !important;
+  background: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(13,110,253,0.16);
+  border-radius: 8px;
+}
+
+/* cards */
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* buttons */
+.btn-primary {
+  background: linear-gradient(90deg, var(--primary), #2e59d9);
+  border: none;
+}
+.btn-primary:hover{
+  filter: brightness(.95);
+}
+
+/* small responsive tweaks */
+@media (max-width: 768px){
+  .nav-hover{ display:block; width:100%; }
+}
