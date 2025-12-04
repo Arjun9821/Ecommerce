@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', '') }}</title>
+    <title>{{ config('app.name', 'Click&Collect') }}</title>
+
+    <!-- Vite CSS & JS -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,7 +24,7 @@
         /* Top Navigation Bar */
         .top-nav {
             width: 100%;
-            background: #fd7e14; /* Orange background */
+            background: #fd7e14;
             border-bottom: 1px solid #e06614;
             display: flex;
             align-items: center;
@@ -44,6 +47,7 @@
             height: 40px;
             width: auto;
             margin-right: 10px;
+            border-radius: 5px;
         }
 
         .top-nav .logo span {
@@ -59,7 +63,7 @@
             align-items: center;
             padding: 10px 0;
             cursor: pointer;
-            color: #fff; /* White text by default */
+            color: #fff;
             text-decoration: none;
             transition: 0.3s;
         }
@@ -69,7 +73,6 @@
             transition: 0.3s;
         }
 
-        /* Grow bar below text */
         .top-nav .nav-item::after {
             content: "";
             position: absolute;
@@ -77,12 +80,12 @@
             left: 0;
             width: 0;
             height: 3px;
-            background: #fff; /* White grow bar */
+            background: #fff;
             transition: 0.3s;
         }
 
         .top-nav .nav-item:hover {
-            color: #ffd1a3; /* Lighter orange on hover */
+            color: #ffd1a3;
         }
 
         .top-nav .nav-item:hover i {
@@ -95,20 +98,18 @@
             background: #fff;
         }
 
-        /* Active link */
         .top-nav .nav-item.active {
-            color: #fff; /* White for active */
+            color: #fff;
             font-weight: bold;
         }
 
         .top-nav .nav-item.active::after {
             width: 100%;
-            background: #fff; /* Grow bar white */
+            background: #fff;
         }
 
-        /* Content area */
         .content-area {
-            margin-top: 70px; /* leave space for navbar */
+            margin-top: 70px;
             padding: 25px;
         }
 
@@ -121,15 +122,12 @@
 
     <!-- Top Navigation Bar -->
     <div class="top-nav">
-        
-        <!-- Logo -->
-<div class="logo d-flex align-items-center">
-    <img src="{{ asset('images/ecom/CandC.jpg') }}" 
-         alt="Logo" 
-         style="width:50px; height:50px; object-fit:cover; margin-right:10px; border-radius:5px;">
-    <span style="color:#fff; font-weight:bold; font-size:20px;">{{ config('app.name', 'Click&Collect') }}</span>
-</div>
 
+        <!-- Logo -->
+        <div class="logo d-flex align-items-center">
+            <img src="{{ asset('images/ecom/CandC.jpg') }}" alt="Logo">
+            <span>{{ config('app.name', 'Click&Collect') }}</span>
+        </div>
 
         <!-- Navigation Links -->
         <a href="{{ route('shop.index') }}" class="nav-item {{ request()->routeIs('shop.index') ? 'active' : '' }}">
@@ -187,6 +185,7 @@
                 <i class="fa fa-receipt"></i> Orders
             </a>
         @endcan
+
     </div>
 
     <!-- Main Content -->

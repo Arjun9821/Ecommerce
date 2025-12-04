@@ -60,28 +60,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Checkout Routes — FIXED
-    |--------------------------------------------------------------------------
-    */
-
-    // Show checkout page (GET)
-    Route::get('/checkout/{order}', [CheckoutController::class, 'show'])
-        ->name('checkout');
-
-    // Process checkout (POST)
-    Route::post('/checkout', [CheckoutController::class, 'store'])
-        ->name('checkout.store');
-
-    // Payment success callback
-    Route::post('/checkout/{order}/success', [CheckoutController::class, 'paymentSuccess'])
-        ->name('checkout.success');
+    // Checkout Routes
+    Route::get('/checkout/{order}', [CheckoutController::class, 'show'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::post('/checkout/{order}/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
 
     // Buy Now
     Route::post('/buy-now/{id}', [BuyNowController::class, 'buyNow'])->name('buy.now');
 });
-
 
 /*
 |--------------------------------------------------------------------------
@@ -101,19 +87,21 @@ Route::middleware(['auth', 'admin'])
         Route::resource('categories', AdminCategoryController::class);
 
         // Orders
-        Route::resource('orders', AdminOrderController::class)
-            ->except(['create', 'edit', 'store', 'update']);
-        Route::post('orders/{id}/status', [AdminOrderController::class, 'updateStatus'])
-            ->name('orders.updateStatus');
+        Route::resource('orders', AdminOrderController::class)->except(['create', 'edit', 'store', 'update']);
+        Route::post('orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
         // Admin Cart Items
-        Route::get('cart-items', [\App\Http\Controllers\Admin\CartItemController::class, 'index'])
-            ->name('cart-items.index');
-        Route::get('cart-items/{id}/edit', [\App\Http\Controllers\Admin\CartItemController::class, 'edit'])
-            ->name('cart-items.edit');
-        Route::post('cart-items/{id}/update', [\App\Http\Controllers\Admin\CartItemController::class, 'update'])
-            ->name('cart-items.update');
-        Route::delete('cart-items/{id}', [\App\Http\Controllers\Admin\CartItemController::class, 'destroy'])
-            ->name('cart-items.destroy');
+        Route::get('cart-items', [\App\Http\Controllers\Admin\CartItemController::class, 'index'])->name('cart-items.index');
+        Route::get('cart-items/{id}/edit', [\App\Http\Controllers\Admin\CartItemController::class, 'edit'])->name('cart-items.edit');
+        Route::post('cart-items/{id}/update', [\App\Http\Controllers\Admin\CartItemController::class, 'update'])->name('cart-items.update');
+        Route::delete('cart-items/{id}', [\App\Http\Controllers\Admin\CartItemController::class, 'destroy'])->name('cart-items.destroy');
     });
 
+/*
+|--------------------------------------------------------------------------
+| SPA Fallback
+|--------------------------------------------------------------------------
+*/
+Route::get('/{any}', function () {
+    return view('welcome'); // Blade file serving React SPA
+})->where('any', '.*');
