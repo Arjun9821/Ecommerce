@@ -18,6 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            // Discount columns
+            $table->decimal('discount_price', 10, 2)->nullable();
+            $table->timestamp('discount_expires_at')->nullable();
+
             $table->timestamps();
         });
     }

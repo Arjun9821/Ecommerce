@@ -19,9 +19,9 @@ use App\Http\Controllers\BuyNowController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
+
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{id}', [ShopController::class, 'show'])->name('shop.show');
-Route::get('/product/{id}', [ShopController::class, 'show'])->name('shop.show');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
 /*
@@ -37,6 +37,7 @@ require __DIR__ . '/auth.php';
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
+
     // Dashboard
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
 
@@ -46,52 +47,73 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Addresses
     Route::get('/addresses', [UserController::class, 'addresses'])->name('user.addresses');
-    Route::get('/addresses/create', [UserController::class, 'createAddress'])->name('user.address.create'); 
-    Route::post('/addresses', [UserController::class, 'storeAddress'])->name('user.address.store'); 
+    Route::get('/addresses/create', [UserController::class, 'createAddress'])->name('user.address.create');
+    Route::post('/addresses', [UserController::class, 'storeAddress'])->name('user.address.store');
 
     // Orders
     Route::get('/myorders', [UserController::class, 'orders'])->name('user.orders');
     Route::get('/user/orders/{order}', [UserController::class, 'showOrder'])->name('user.orders.show');
 
-    // Cart routes (user)
+    // Cart
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
-    // Checkout
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
-    Route::get('/checkout/{order}', [CheckoutController::class, 'show'])->name('checkout');
-    Route::post('/checkout/{order}/success', [CheckoutController::class, 'paymentSuccess'])->name('checkout.success');
+    /*
+    |--------------------------------------------------------------------------
+    | Checkout Routes — FIXED
+    |--------------------------------------------------------------------------
+    */
+
+    // Show checkout page (GET)
+    Route::get('/checkout/{order}', [CheckoutController::class, 'show'])
+        ->name('checkout');
+
+    // Process checkout (POST)
+    Route::post('/checkout', [CheckoutController::class, 'store'])
+        ->name('checkout.store');
+
+    // Payment success callback
+    Route::post('/checkout/{order}/success', [CheckoutController::class, 'paymentSuccess'])
+        ->name('checkout.success');
 
     // Buy Now
     Route::post('/buy-now/{id}', [BuyNowController::class, 'buyNow'])->name('buy.now');
 });
 
+
 /*
 |--------------------------------------------------------------------------
-| Admin Routes (Protected with Admin Middleware)
+| Admin Routes
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
+
         // Dashboard
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
-        // Products & Categories CRUD
+        // Categories & Products CRUD
         Route::resource('products', AdminProductController::class);
         Route::resource('categories', AdminCategoryController::class);
 
-        // Orders (Read-only + Status Update)
+        // Orders
         Route::resource('orders', AdminOrderController::class)
             ->except(['create', 'edit', 'store', 'update']);
-        Route::post('orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+        Route::post('orders/{id}/status', [AdminOrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
 
         // Admin Cart Items
-        Route::get('cart-items', [\App\Http\Controllers\Admin\CartItemController::class, 'index'])->name('cart-items.index');
-        Route::get('cart-items/{id}/edit', [\App\Http\Controllers\Admin\CartItemController::class, 'edit'])->name('cart-items.edit');
-        Route::post('cart-items/{id}/update', [\App\Http\Controllers\Admin\CartItemController::class, 'update'])->name('cart-items.update');
-        Route::delete('cart-items/{id}', [\App\Http\Controllers\Admin\CartItemController::class, 'destroy'])->name('cart-items.destroy');
+        Route::get('cart-items', [\App\Http\Controllers\Admin\CartItemController::class, 'index'])
+            ->name('cart-items.index');
+        Route::get('cart-items/{id}/edit', [\App\Http\Controllers\Admin\CartItemController::class, 'edit'])
+            ->name('cart-items.edit');
+        Route::post('cart-items/{id}/update', [\App\Http\Controllers\Admin\CartItemController::class, 'update'])
+            ->name('cart-items.update');
+        Route::delete('cart-items/{id}', [\App\Http\Controllers\Admin\CartItemController::class, 'destroy'])
+            ->name('cart-items.destroy');
     });
+

@@ -8,16 +8,17 @@ class HomeController extends Controller
 {
     public function welcome()
     {
-        // All recent products (limit 8)
+        // 1️⃣ Get the 8 most recent products
         $products = Product::latest()->take(8)->get();
 
-        // Flash products (active discounts)
-        $flashProducts = Product::whereNotNull('discount_price')
-            ->where('discount_expires_at', '>', now())
+        // 2️⃣ Get the 8 products with active discounts
+        $flashProducts = Product::whereNotNull('discount_price')       
+            ->where('discount_expires_at', '>', now())                 
             ->latest()
             ->take(8)
             ->get();
 
+        // 3️⃣ Return view with both collections
         return view('welcome', compact('products', 'flashProducts'));
     }
 }
